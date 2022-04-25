@@ -6,7 +6,7 @@ const app = express();
 
 // Home Response route
 app.get("/", (req, res) => {
-    res.send("Welcome to seven School  soutenance!");
+    res.send("Welcome to the home page!");
   });
 
   // Server setup
