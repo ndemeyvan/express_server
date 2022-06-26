@@ -15,7 +15,7 @@ spec:
         app: express-deployment-test
     spec:
       containers:
-      - name: express_test
+      - name: express-test
         image: ndemeyvan/express_app_test
         ports:
         - containerPort: 8080
