@@ -80,14 +80,14 @@ jobs:
            path: /tmp
 # Load l'image   
       - name: Load Docker image
-        run: docker load --input /tmp/${{env.${{ env.IMAGE_NAME }}.tar
-        
+        run: docker load --input /tmp/${{env.IMAGE_ARTEFACT_NAME }}.tar
+
       - name: Display all docker images
         run: docker image ls -a
 
       - name: Test docker image
       - name: create docker container ${{ env.IMAGE_NAME }}
-        run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{env.${{ env.IMAGE_NAME }}
+        run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{env.IMAGE_ARTEFACT_NAME }}
       - name: Wait the container start
         run: sleep 5
       - name: Curl the localhost address
