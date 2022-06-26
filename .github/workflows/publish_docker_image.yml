@@ -65,7 +65,9 @@ jobs:
     - name: Create namespace
       run: kubectl create namespace production | echo "Name space already exist"
     - name: show folder
-      run: ls && pwd
+      run: ls 
+    - name: show path
+      run: pwd
     - name: Apply all k8s object
       run: kubectl apply -f k8s/ -n production
 
