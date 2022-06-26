@@ -14,20 +14,22 @@ env:
   INT_PORT: 8080
   IMAGE_NAME: ndemeyvan/express_app_test
   IMAGE_ARTEFACT_NAME: express_app_test
+  OS: ubuntu-latest
+  NODE_VERSION: 16.x
 
 jobs:
 
 # # # # # # # # # # # # # # Build
+
   build:
     runs-on: ${{matrix.os}}
 
     strategy:
       matrix:
-        node-version: [16.x]
-        os: [ubuntu-latest]
+        node-version: [env.NODE_VERSION]
+        os: [env.OS]
 
     steps:
-#     Checkouk sur le code actuel
     - name: Checkout to the actual code
       uses: actions/checkout@v3 
         
@@ -41,17 +43,6 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:latest
           outputs: type=docker,dest=/tmp/${{env.IMAGE_ARTEFACT_NAME}}.tar
 
-    # - name: Build & push Docker image
-    #   uses: mr-smithers-excellent/docker-build-push@v5
-    #   with:
-    #     image: ${{ env.IMAGE_NAME }}
-    #     tags: latest
-    #     registry: docker.io
-    #     dockerfile: Dockerfile
-    #     username: ${{ secrets.DOCKER_USERNAME }}
-    #     password: ${{ secrets.DOCKER_PASSWORD }}
-
-#   Save the image with github artifact
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
@@ -70,13 +61,12 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-# Download artifact
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
            name: ${{env.IMAGE_ARTEFACT_NAME }}
            path: /tmp
-# Load l'image 
+
       - name: Load Docker image
         run: docker load --input /tmp/${{env.IMAGE_ARTEFACT_NAME }}.tar
 
