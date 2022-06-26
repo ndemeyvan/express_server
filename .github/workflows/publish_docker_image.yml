@@ -71,13 +71,13 @@ jobs:
         node-version: [16.x]
         os: [ubuntu-latest]
 
-    steps:
-# Download artifact
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-           name: ${{env.IMAGE_ARTEFACT_NAME }}
-           path: /tmp
+#     steps:
+# # Download artifact
+#       - name: Download artifact
+#         uses: actions/download-artifact@v2
+#         with:
+#            name: ${{env.IMAGE_ARTEFACT_NAME }}
+#            path: /tmp
 # Load l'image   
       # - name: Load Docker image
       #   run: docker load --input /tmp/${{env.IMAGE_ARTEFACT_NAME }}.tar
