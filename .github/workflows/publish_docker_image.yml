@@ -72,10 +72,11 @@ jobs:
         os: [ubuntu-latest]
 # Download artifact
     steps:
+
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-           name: image
+           name: ${{env.${{ env.IMAGE_NAME }}
            path: /tmp
 # Load l'image   
       - name: Load Docker image
