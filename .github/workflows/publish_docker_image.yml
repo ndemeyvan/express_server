@@ -93,7 +93,7 @@ jobs:
         run: sleep 5
 
       - name: Curl the localhost address
-        run: curl localhost:9000 | grep "Hello"
+        run: curl localhost:${{env.EXT_PORT}} | grep "Monopoli"
 
 # # # # # # # # # # # # # # Deployment
   # deploy: 
