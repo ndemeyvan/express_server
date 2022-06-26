@@ -86,7 +86,7 @@ jobs:
         run: docker images
 
       - name: create docker container ${{env.IMAGE_ARTEFACT_NAME }}
-        run: docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{ env.IMAGE_NAME }}
+        run: docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_ARTEFACT_NAME }}  ${{ env.IMAGE_NAME }}
 
       - name: Wait the container start
         run: sleep 5
