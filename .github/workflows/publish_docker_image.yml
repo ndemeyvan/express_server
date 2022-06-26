@@ -66,6 +66,6 @@ jobs:
     - name: Create namespace
       run: kubectl create namespace production
     - name: Apply all k8s object
-      run: apply -f k8s/
+      run: kubectl apply -f k8s/
 
 
