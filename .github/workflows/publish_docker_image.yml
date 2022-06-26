@@ -1,5 +1,5 @@
 
-name: Build and push docker image to registry
+name: Build , push docker image to digial ocean cluster 
 
 on:
   push:
@@ -63,5 +63,9 @@ jobs:
     # Run any kubectl commands you want!
     - name: Get All Cluster information
       run: kubectl get all
+    - name: Create namespace
+      run: kubectl create namespace production
+    - name: Apply all k8s object
+      run: apply -f k8s/
 
 
