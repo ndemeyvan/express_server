@@ -51,7 +51,6 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-      # Set up the Kubernetes CLI with your DigitalOcean Kubernetes cluster.
     - name: Set up kubectl
       uses: matootie/dokube@v1.4.0
       with:
