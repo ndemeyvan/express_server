@@ -44,7 +44,6 @@ jobs:
       uses: docker/build-push-action@v3
       with:
           context: .
-          push: true
           tags: ${{ env.IMAGE_NAME }}:latest
           outputs: type=docker,dest=/tmp/${{env.IMAGE_ARTEFACT_NAME}}.tar
 
