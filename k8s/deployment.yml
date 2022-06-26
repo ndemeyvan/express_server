@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: express-test
-        image: ndemeyvan/express_app_test
+        image: ndemeyvan/express_app_test:latest
         ports:
         - containerPort: 8080
