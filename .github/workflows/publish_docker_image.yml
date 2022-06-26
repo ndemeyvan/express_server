@@ -13,6 +13,7 @@ env:
   EXT_PORT: 8080
   INT_PORT: 8080
   IMAGE_NAME: ndemeyvan/express_app_test
+  IMAGE_ARTEFACT_NAME: express_app_test
 
 jobs:
 # # # # # # # # # # # # # # Build
@@ -25,15 +26,9 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-#     Checkou sur le code actuel
+#     Checkouk sur le code actuel
     - name: Checkout to the actual code
       uses: actions/checkout@v3 
-      
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
         
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
@@ -63,26 +58,37 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: image
-          path: /tmp/image.tar
+          path: /tmp/${{env.${{ env.IMAGE_NAME }}.tar
   
 # # # # # # # # # # # # # # Test
 
-  # test:
-  #   needs: build 
-  #   runs-on: ${{matrix.os}}
+  test:
+    needs: build 
+    runs-on: ${{matrix.os}}
 
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.x]
-  #       os: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [16.x]
+        os: [ubuntu-latest]
+# Download artifact
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+           name: image
+           path: /tmp
+# Load l'image   
+      - name: Load Docker image
+        run: |
+          docker load --input /tmp/${{env.${{ env.IMAGE_NAME }}.tar
+          docker image ls -a
 
-  #   steps:
-  #     - name: Test docker image
-  #     - name: create docker container ${{ env.IMAGE_NAME }}
-  #       run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{ env.IMAGE_NAME }}
-  #     - name: Wait the container start
-  #       run: sleep 5
-  #     - run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
+      - name: Test docker image
+      - name: create docker container ${{ env.IMAGE_NAME }}
+        run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{env.${{ env.IMAGE_NAME }}
+      - name: Wait the container start
+        run: sleep 5
+      - run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
 
 # # # # # # # # # # # # # # Deployment
   # deploy: 
