@@ -35,7 +35,7 @@ jobs:
       name: Build & push Docker image
       with:
         image: ndemeyvan/express_app_test
-        tags: v1, latest
+        tags: latest
         registry: docker.io
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
