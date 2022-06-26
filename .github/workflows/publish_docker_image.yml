@@ -76,7 +76,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-           name: ${{env.${{ env.IMAGE_NAME }}
+           name: ${{env.IMAGE_ARTEFACT_NAME }}
            path: /tmp
 # Load l'image   
       - name: Load Docker image
