@@ -102,31 +102,32 @@ jobs:
         run: docker push ${{env.IMAGE_NAME}}
 
 # # # # # # # # # # # # # # Deployment
-  # deploy: 
-  #   needs: test 
-  #   runs-on: ${{matrix.os}}
 
-  #   strategy:
-  #     matrix:
-  #       node-version: [16.x]
-  #       os: [ubuntu-latest]
+  deploy: 
+    needs: test 
+    runs-on: ${{matrix.os}}
 
-  #   steps:
-  #   - name: Set up kubectl
-  #     uses: matootie/dokube@v1.4.0
-  #     with:
-  #       personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
-  #       clusterName: ${{ secrets.CLUSTER_NAME }}
+    strategy:
+      matrix:
+        node-version: [16.x]
+        os: [ubuntu-latest]
 
-  #   - name: Checkout to the actual code
-  #     uses: actions/checkout@v3
+    steps:
+    - name: Set up kubectl
+      uses: matootie/dokube@v1.4.0
+      with:
+        personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        clusterName: ${{ secrets.CLUSTER_NAME }}
 
-  #   # Run any kubectl commands you want!
-  #   - name: Create namespace
-  #     run: kubectl create namespace ${{ env.NAME_SPACE }} | echo "Name space already exist"
-  #   - name: restart deployment
-  #     run: kubectl -n ${{ env.NAME_SPACE }} rollout restart deploy | echo "Empty deployment"
-  #   - name: Apply all k8s object
-  #     run: kubectl -n test apply -f k8s/
+    - name: Checkout to the actual code
+      uses: actions/checkout@v3
+
+    # Run any kubectl commands you want!
+    - name: Create namespace
+      run: kubectl create namespace ${{ env.NAME_SPACE }} | echo "Name space already exist"
+    - name: restart deployment
+      run: kubectl -n ${{ env.NAME_SPACE }} rollout restart deploy | echo "Empty deployment"
+    - name: Apply all k8s object
+      run: kubectl -n test apply -f k8s/
 
 
