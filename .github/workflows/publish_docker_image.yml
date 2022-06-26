@@ -15,7 +15,7 @@ env:
   IMAGE_NAME: ndemeyvan/express_app_test
 
 jobs:
-#   Nom du job 1 ou +sieur
+# # # # # # # # # # # # # # Build
   build:
     runs-on: ${{matrix.os}}
 
@@ -37,8 +37,8 @@ jobs:
         
     - run: npm install
     - run: npm run build --if-present
-    - uses: mr-smithers-excellent/docker-build-push@v5
-      name: Build & push Docker image
+    - name: Build & push Docker image
+      uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: ${{ env.IMAGE_NAME }}
         tags: latest
@@ -46,50 +46,59 @@ jobs:
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        outputs: type=oci,dest=/tmp/${{ env.IMAGE_NAME }}.tar
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: image
+          path: /tmp/${{ env.IMAGE_NAME }}.tar
   
 # # # # # # # # # # # # # # Test
 
-  test:
-    needs: build 
-    runs-on: ${{matrix.os}}
+  # test:
+  #   needs: build 
+  #   runs-on: ${{matrix.os}}
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-        os: [ubuntu-latest]
+  #   strategy:
+  #     matrix:
+  #       node-version: [16.x]
+  #       os: [ubuntu-latest]
 
-    steps:
-      - name: Test docker image
-      - run: docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{ env.IMAGE_NAME }}
-      - run: sleep 4
-      - run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
+  #   steps:
+  #     - name: Test docker image
+  #     - name: create docker container ${{ env.IMAGE_NAME }}
+  #       run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{ env.IMAGE_NAME }}
+  #     - name: Wait the container start
+  #       run: sleep 5
+  #     - run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
 
 # # # # # # # # # # # # # # Deployment
-  deploy: 
-    needs: test 
-    runs-on: ${{matrix.os}}
+  # deploy: 
+  #   needs: test 
+  #   runs-on: ${{matrix.os}}
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-        os: [ubuntu-latest]
+  #   strategy:
+  #     matrix:
+  #       node-version: [16.x]
+  #       os: [ubuntu-latest]
 
-    steps:
-    - name: Set up kubectl
-      uses: matootie/dokube@v1.4.0
-      with:
-        personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
-        clusterName: ${{ secrets.CLUSTER_NAME }}
+  #   steps:
+  #   - name: Set up kubectl
+  #     uses: matootie/dokube@v1.4.0
+  #     with:
+  #       personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
+  #       clusterName: ${{ secrets.CLUSTER_NAME }}
 
-    - name: Checkout to the actual code
-      uses: actions/checkout@v3
+  #   - name: Checkout to the actual code
+  #     uses: actions/checkout@v3
 
-    # Run any kubectl commands you want!
-    - name: Create namespace
-      run: kubectl create namespace ${{ env.NAME_SPACE }} | echo "Name space already exist"
-    - name: restart deployment
-      run: kubectl -n ${{ env.NAME_SPACE }} rollout restart deploy | echo "Empty deployment"
-    - name: Apply all k8s object
-      run: kubectl -n test apply -f k8s/
+  #   # Run any kubectl commands you want!
+  #   - name: Create namespace
+  #     run: kubectl create namespace ${{ env.NAME_SPACE }} | echo "Name space already exist"
+  #   - name: restart deployment
+  #     run: kubectl -n ${{ env.NAME_SPACE }} rollout restart deploy | echo "Empty deployment"
+  #   - name: Apply all k8s object
+  #     run: kubectl -n test apply -f k8s/
 
 
