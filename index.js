@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
   });
 
   // Server setup
-app.listen(80, () => {
+app.listen(8080, () => {
     console.log(
   `Server listening on http://localhost:3000`);
   });
