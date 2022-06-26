@@ -83,10 +83,10 @@ jobs:
         run: docker load --input /tmp/${{env.IMAGE_ARTEFACT_NAME }}.tar
 
       - name: Display all docker images
-        run: docker image ls -a
+        run: docker images
 
-      - name: create docker container ${{ env.IMAGE_NAME }}
-        run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{env.IMAGE_ARTEFACT_NAME }}
+      - name: create docker container ${{env.IMAGE_ARTEFACT_NAME }}
+        run: docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{env.IMAGE_ARTEFACT_NAME }}
 
       - name: Wait the container start
         run: sleep 5
