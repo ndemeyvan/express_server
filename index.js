@@ -3,6 +3,7 @@
 // Requiring modules
 const express = require("express");
 const app = express();
+const port = 8080
 
 // Home Response route
 app.get("/", (req, res) => {
@@ -10,7 +11,7 @@ app.get("/", (req, res) => {
   });
 
 
-app.listen(8080, () => {
+app.listen(port, () => {
     console.log(
-  `Server listening on http://localhost:3000`);
+  `Server listening on http://localhost:${port}`);
   });

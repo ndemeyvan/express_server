@@ -34,12 +34,6 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v2
-      with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
     - name: Build
       uses: docker/build-push-action@v2
       with:
@@ -56,7 +50,6 @@ jobs:
     #     dockerfile: Dockerfile
     #     username: ${{ secrets.DOCKER_USERNAME }}
     #     password: ${{ secrets.DOCKER_PASSWORD }}
-    #     outputs: type=oci,dest=/tmp/${{ env.IMAGE_ARTEFACT_NAME }}.tar
 
 #   Save the image with github artifact
     - name: Upload artifact
@@ -98,6 +91,12 @@ jobs:
 
       - name: Curl the localhost address
         run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: The test is correct , push image to dockerHub
         run: docker push ${{env.IMAGE_NAME}}
