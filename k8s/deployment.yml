@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: express-deployment
+  name: express-deployment-test
   labels:
-    app: express-deployment
+    app: express-deployment-test
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: express-deployment
+      app: express-deployment-test
   template:
     metadata:
       labels:
-        app: express-deployment
+        app: express-deployment-test
     spec:
       containers:
       - name: express
-        image: ndemeyvan/express_app
+        image: ndemeyvan/express_app_test
         ports:
         - containerPort: 80

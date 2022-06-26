@@ -1,11 +1,11 @@
 
-name: Build , push docker image to digial ocean cluster 
+name: Build , push docker image to digial ocean cluster to test
 
 on:
   push:
-    branches: [ "ndemeyvan-docker-ci-cd" ]
+    branches: [ "test" ]
   pull_request:
-    branches: [ "ndemeyvan-docker-ci-cd" ]
+    branches: [ "test" ]
   workflow_dispatch:
 
 jobs:
@@ -31,11 +31,10 @@ jobs:
         
     - run: npm install
     - run: npm run build --if-present
-    - run: ls
     - uses: mr-smithers-excellent/docker-build-push@v5
       name: Build & push Docker image
       with:
-        image: ndemeyvan/express_app
+        image: ndemeyvan/express_app_test
         tags: v1, latest
         registry: docker.io
         dockerfile: Dockerfile
@@ -66,12 +65,8 @@ jobs:
     - name: Get All Cluster information
       run: kubectl get all
     - name: Create namespace
-      run: kubectl create namespace production | echo "Name space already exist"
-    - name: show folder
-      run: ls 
-    - name: show path
-      run: pwd
+      run: kubectl create namespace test | echo "Name space already exist"
     - name: Apply all k8s object
-      run: kubectl -n production apply -f k8s/ 
+      run: kubectl -n test apply -f k8s/
 
 

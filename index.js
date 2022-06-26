@@ -6,7 +6,7 @@ const app = express();
 
 // Home Response route
 app.get("/", (req, res) => {
-    res.send("Hello production");
+    res.send("Hello test");
   });
 
   // Server setup
