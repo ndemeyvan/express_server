@@ -59,6 +59,9 @@ jobs:
         personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
         clusterName: ${{ secrets.CLUSTER_NAME }}
 
+    - name: Checkout to the actual code
+      uses: actions/checkout@v3
+
     # Run any kubectl commands you want!
     - name: Get All Cluster information
       run: kubectl get all
@@ -69,6 +72,6 @@ jobs:
     - name: show path
       run: pwd
     - name: Apply all k8s object
-      run: kubectl apply -f k8s/ -n production
+      run: kubectl -n production apply -f k8s/ 
 
 
