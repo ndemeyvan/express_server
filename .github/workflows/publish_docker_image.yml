@@ -8,6 +8,9 @@ on:
     branches: [ "test" ]
   workflow_dispatch:
 
+env:
+  NAME_SPACE: test
+
 jobs:
 #   Nom du job 1 ou +sieur
   build:
@@ -61,10 +64,10 @@ jobs:
       uses: actions/checkout@v3
 
     # Run any kubectl commands you want!
-    - name: Get All Cluster information
-      run: kubectl get all
     - name: Create namespace
-      run: kubectl create namespace test | echo "Name space already exist"
+      run: kubectl create namespace ${{ env.NAME_SPACE }} | echo "Name space already exist"
+    - name: restart deployment
+      run: kubectl -n ${{ env.NAME_SPACE }} rollout restart deploy | echo "Empty deployment"
     - name: Apply all k8s object
       run: kubectl -n test apply -f k8s/
 
