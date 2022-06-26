@@ -6,11 +6,11 @@ const app = express();
 
 // Home Response route
 app.get("/", (req, res) => {
-    res.send("Welcome to the home page v5!");
+    res.send("Hello production");
   });
 
   // Server setup
-app.listen(3000, () => {
+app.listen(80, () => {
     console.log(
   `Server listening on http://localhost:3000`);
   });

@@ -1,22 +1,22 @@
 
-name: Build and push docker image to registry
+name: Build , push docker image to digial ocean cluster 
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "ndemeyvan-docker-ci-cd" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "ndemeyvan-docker-ci-cd" ]
+  workflow_dispatch:
 
 jobs:
 #   Nom du job 1 ou +sieur
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [16.x]
+        os: [ubuntu-latest]
 
     steps:
 #     Checkou sur le code actuel
@@ -29,6 +29,49 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - run: npm ci
+    - run: npm install
     - run: npm run build --if-present
-    - run: npm test
+    - run: ls
+    - uses: mr-smithers-excellent/docker-build-push@v5
+      name: Build & push Docker image
+      with:
+        image: ndemeyvan/express_app
+        tags: v1, latest
+        registry: docker.io
+        dockerfile: Dockerfile
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy: 
+    needs: build 
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        os: [ubuntu-latest]
+
+    steps:
+      # Set up the Kubernetes CLI with your DigitalOcean Kubernetes cluster.
+    - name: Set up kubectl
+      uses: matootie/dokube@v1.4.0
+      with:
+        personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        clusterName: ${{ secrets.CLUSTER_NAME }}
+
+    - name: Checkout to the actual code
+      uses: actions/checkout@v3
+
+    # Run any kubectl commands you want!
+    - name: Get All Cluster information
+      run: kubectl get all
+    - name: Create namespace
+      run: kubectl create namespace production | echo "Name space already exist"
+    - name: show folder
+      run: ls 
+    - name: show path
+      run: pwd
+    - name: Apply all k8s object
+      run: kubectl -n production apply -f k8s/ 
+
+
