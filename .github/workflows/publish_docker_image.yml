@@ -63,7 +63,7 @@ jobs:
     - name: Get All Cluster information
       run: kubectl get all
     - name: Create namespace
-      run: kubectl create namespace production
+      run: kubectl create namespace production | echo "Name space already exist"
     - name: Apply all k8s object
       run: kubectl apply -f k8s/ -n production
 
