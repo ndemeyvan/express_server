@@ -88,7 +88,8 @@ jobs:
         run: Docker run -d -p ${{env.EXT_PORT}}:${{env.INT_PORT}} --name  ${{ env.IMAGE_NAME }}  ${{env.${{ env.IMAGE_NAME }}
       - name: Wait the container start
         run: sleep 5
-      - run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
+      - name: Curl the localhost address
+        run: curl localhost:${{env.EXT_PORT}} | grep "Hello"
 
 # # # # # # # # # # # # # # Deployment
   # deploy: 
