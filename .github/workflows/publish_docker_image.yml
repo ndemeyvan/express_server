@@ -41,7 +41,7 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:latest
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          outputs: type=docker,dest=/tmp/image.tar
+          outputs: type=docker,dest=/tmp/${{env.IMAGE_ARTEFACT_NAME}}.tar
 
     # - name: Build & push Docker image
     #   uses: mr-smithers-excellent/docker-build-push@v5
@@ -78,7 +78,7 @@ jobs:
         with:
            name: ${{env.IMAGE_ARTEFACT_NAME }}
            path: /tmp
-# Load l'image   
+# Load l'image 
       - name: Load Docker image
         run: docker load --input /tmp/${{env.IMAGE_ARTEFACT_NAME }}.tar
 
