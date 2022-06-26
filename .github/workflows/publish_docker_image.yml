@@ -80,9 +80,10 @@ jobs:
            path: /tmp
 # Load l'image   
       - name: Load Docker image
-        run: |
-          docker load --input /tmp/${{env.${{ env.IMAGE_NAME }}.tar
-          docker image ls -a
+        run: docker load --input /tmp/${{env.${{ env.IMAGE_NAME }}.tar
+        
+      - name: Display all docker images
+        run: docker image ls -a
 
       - name: Test docker image
       - name: create docker container ${{ env.IMAGE_NAME }}
