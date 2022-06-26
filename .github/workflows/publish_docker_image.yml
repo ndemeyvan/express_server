@@ -3,9 +3,9 @@ name: Build and push docker image to registry
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "ndemeyvan-docker-ci-cd" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "ndemeyvan-docker-ci-cd" ]
 
 jobs:
 #   Nom du job 1 ou +sieur
@@ -42,3 +42,26 @@ jobs:
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+  deploy: 
+    needs: build 
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        os: [ubuntu-latest]
+
+    steps:
+      # Set up the Kubernetes CLI with your DigitalOcean Kubernetes cluster.
+    - name: Set up kubectl
+      uses: matootie/dokube@v1.4.0
+      with:
+        personalAccessToken: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        clusterName: ${{ secrets.CLUSTER_NAME }}
+
+    # Run any kubectl commands you want!
+    - name: Get All Cluster information
+      run: kubectl get all
+
+
